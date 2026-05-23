@@ -1,0 +1,26 @@
+{
+    "name": "track-any-device/sso-client",
+    "description": "OAuth2 SSO client — token verification, callback controller, and route helper.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^13.7",
+        "laravel/socialite": "^5.0",
+        "track-any-device/core": "^0.0.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "TrackAnyDevice\\SsoClient\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TrackAnyDevice\\SsoClient\\SsoClientServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
