@@ -33,6 +33,32 @@ class SsoClientServiceProvider extends ServiceProvider
                 ))->setConfig($config);
             });
         });
+
+        $this->enforcePhoneVerificationOnAuthorize();
+    }
+
+    /**
+     * On the login domain (where Passport runs), gate /oauth/authorize behind
+     * phone.verified so unverified users cannot obtain authorization codes.
+     * On tenant apps (no Passport routes) this is a no-op.
+     */
+    protected function enforcePhoneVerificationOnAuthorize(): void
+    {
+        $this->app->booted(function () {
+            $routes = $this->app['router']->getRoutes();
+
+            foreach ([
+                'passport.authorizations.authorize',
+                'passport.authorizations.approve',
+                'passport.authorizations.deny',
+            ] as $name) {
+                $route = $routes->getByName($name);
+
+                if ($route) {
+                    $route->middleware('phone.verified');
+                }
+            }
+        });
     }
 
     /**
