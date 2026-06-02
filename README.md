@@ -91,6 +91,24 @@ Registered route:
 
 ---
 
+## Phone verification on the authorize endpoint
+
+On the login domain (where Passport is running), the service provider
+automatically adds `phone.verified` middleware to Passport's
+`/oauth/authorize` routes (GET, POST, DELETE). This prevents unverified
+users from obtaining authorization codes and avoids a redirect loop between
+app surfaces and the login domain.
+
+The `phone.verified` middleware alias must be registered by the host
+application (e.g. in `bootstrap/app.php`). The middleware is only applied
+when the Passport routes exist — on tenant apps this is a safe no-op.
+
+Phone setup routes (`phone.edit`, `phone.verify`, `phone.send`,
+`phone.resend`, `logout`) are excluded inside the middleware itself and
+remain accessible.
+
+---
+
 ## Auth flow
 
 ```
