@@ -43,6 +43,9 @@ class SsoProvider extends AbstractProvider implements ProviderInterface
 
     protected $scopeSeparator = ' ';
 
+    /** @var array<string, mixed> */
+    protected array $config = [];
+
     /** @param array<string, mixed> $config */
     public function setConfig(array $config): static
     {
@@ -52,7 +55,16 @@ class SsoProvider extends AbstractProvider implements ProviderInterface
 
     private function serverUrl(): string
     {
-        return rtrim((string) ($this->config['server_url'] ?? config('services.sso.server_url', '')), '/');
+        $url = $this->config['server_url']
+            ?? config('services.sso.server_url')
+            ?? env('SSO_SERVER_URL')
+            ?? '';
+
+        if ($url === '' && env('LOGIN_DOMAIN')) {
+            $url = 'https://'.env('LOGIN_DOMAIN');
+        }
+
+        return rtrim((string) $url, '/');
     }
 
     protected function getAuthUrl($state): string

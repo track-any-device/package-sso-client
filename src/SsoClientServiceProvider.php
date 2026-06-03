@@ -73,6 +73,10 @@ class SsoClientServiceProvider extends ServiceProvider
         $serverUrl = $app['config']['services.sso.server_url']
             ?? env('SSO_SERVER_URL', '');
 
+        if ($serverUrl === '' && env('LOGIN_DOMAIN')) {
+            $serverUrl = 'https://'.env('LOGIN_DOMAIN');
+        }
+
         $surface = env('APP_SURFACE', '');
 
         if ($surface !== '') {
